@@ -1,0 +1,2157 @@
+openapi: 3.0.0
+info:
+  contact:
+    name: API Support
+    email: info@quantumco.com
+  description: |
+    Rest api quantum  : users
+  version: 1.0.0
+  title: User Rest api
+  termsOfService: /terms-of-use
+servers:
+  - url: '{protocol}{server}/api/{version}'
+    variables:
+      protocol:
+        enum:
+          - 'http://'
+          - 'https://'
+          - 'ws://'
+          - 'wss://'
+        default: 'http://'
+      server:
+        enum:
+          - quantum.test
+          - quantumco.ir
+        default: quantum.test
+      version:
+        enum:
+          - v1
+          - v2
+        default: v1
+tags:
+  - name: users
+  - name: login
+  - name: brands
+  - name: texts
+  - name: permissions
+  - name: roles
+  - name: logs
+  - name: categories
+  - name: orders
+  - name: provinces
+  - name: warehouses
+  - name: inventory
+  - name: products
+  - name: careers
+  - name: order-types
+  - name: transactions
+  - name: zones
+  - name: contacts
+  - name: tickets
+paths:
+  /login:
+    post:
+      tags:
+        - login
+      servers:
+        - url: 'http://quantum.test/api'
+        - url: 'http://quantumco.ir/api'
+      description: login user    
+      operationId: loginUser
+      security: []
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user:
+    get:
+      tags:
+        - users
+      description: get detail user      
+      operationId: UserProfile
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/users:
+    get:
+      tags:
+        - users
+      description: get all users       
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Search'
+      operationId: UsersInfo
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - users
+      description: add new users      
+      operationId: AddUser
+      parameters:
+        - name: name
+          in: query
+          description: name user
+          required: true
+          schema:
+            type: string
+        - name: family
+          in: query
+          description: family user
+          required: true
+          schema:
+            type: string
+        - name: mobile
+          in: query
+          description: mobile user
+          required: true
+          schema:
+            type: number
+        - name: national_id
+          in: query
+          description: national_id user
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: gender
+          required: true
+          description: |
+            gender-sd:
+             * 0 - man.
+             * 1 - woman.
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+            default: 0
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/users/{user}':
+    parameters:
+      - name: user
+        in: path
+        description: ID User
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags:
+        - users
+      description: get one users details       
+      operationId: UserInfo
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/users/search:
+    get:
+      tags:
+        - users
+      description: search on all user      
+      operationId: UserSearch
+      parameters:
+        - name: search
+          in: query
+          description: name or id user
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/brands:
+    get:
+      tags:
+        - brands
+      description: get all brands (paginate)      
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Search'
+      operationId: brandsList
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - brands
+      description: add new brand      
+      operationId: AddBrand
+      parameters:
+        - name: name
+          in: query
+          description: name user
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/brands/{brand}':
+    parameters:
+      - name: brand
+        in: path
+        description: slug brand
+        required: true
+        schema:
+          type: string
+    patch:
+      tags:
+        - brands
+      description: update brand      
+      operationId: updateBrand
+      parameters:
+        - name: name
+          in: query
+          description: name user
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/texts:
+    get:
+      tags:
+        - texts
+      description: get all texts (paginate)      
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Search'
+      operationId: TextsList
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - texts
+      description: send single sms      
+      operationId: SendSmsSingle
+      parameters:
+        - name: mobile
+          in: query
+          description: mobile sms
+          required: true
+          schema:
+            type: integer
+        - name: message
+          in: query
+          description: message sms
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: 200 OK
+        '201':
+          description: 201 OK
+  /user/texts/import:
+    post:
+      tags:
+        - texts
+      description: import file csv      
+      operationId: TextsImport
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  description: The file csv to upload.
+                  type: string
+                  format: binary
+              required:
+                - file
+      security:
+        - Bearer: []
+      responses:
+        '204':
+          description: file uploaded
+  /user/texts/report:
+    get:
+      tags:
+        - texts
+      description: get data reports texts      
+      operationId: TextsReport
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/permissions:
+    get:
+      tags:
+        - permissions
+      description: get permissions (paginate)      
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Search'
+      operationId: Permissions
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - permissions
+      description: add new permissions      
+      operationId: AddPermissions
+      parameters:
+        - name: name
+          in: query
+          description: name permission
+          required: true
+          schema:
+            type: string
+        - name: guard_name
+          in: query
+          description: guard_name permission
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/permissions/{permission}':
+    parameters:
+      - name: permission
+        in: path
+        description: permission id
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - permissions
+      description: get permission      
+      operationId: Permission
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    patch:
+      tags:
+        - permissions
+      description: upadte new permissions      
+      operationId: UpdatePermissions
+      deprecated: true
+      parameters:
+        - name: name
+          in: query
+          description: name permission
+          required: true
+          schema:
+            type: string
+        - name: guard_name
+          in: query
+          description: guard_name permission
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - web
+                - api
+                - api-bank
+              default: api
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/permissions/{permission}/roles':
+    parameters:
+      - name: permission
+        in: path
+        description: permission id
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - permissions
+      description: get permissions (paginate)      
+      operationId: GetRolePermission
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - permissions
+      description: add new permissions      
+      operationId: AddRolePermission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Roles'
+        description: array roles for this permission
+        required: true
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/roles:
+    get:
+      tags:
+        - roles
+      description: get roles (paginate)      
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Search'
+      operationId: roles
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - roles
+      description: add new roles      
+      operationId: Addroles
+      parameters:
+        - name: name
+          in: query
+          description: name role
+          required: true
+          schema:
+            type: string
+        - name: guard_name
+          in: query
+          description: guard_name role
+          required: true
+          schema:
+            type: string
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/roles/{role}':
+    parameters:
+      - name: role
+        in: path
+        description: role id
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - roles
+      description: get role      
+      operationId: role
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    patch:
+      tags:
+        - roles
+      description: upadte new roles      
+      operationId: Updateroles
+      parameters:
+        - name: name
+          in: query
+          description: name role
+          required: true
+          schema:
+            type: string
+        - name: guard_name
+          in: query
+          description: guard_name role
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - web
+                - api
+                - api-bank
+              default: api
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/roles/{role}/permissions':
+    parameters:
+      - name: role
+        in: path
+        description: role id
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - roles
+      description: get permissions role      
+      operationId: GetPermissionRole
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - roles
+      description: add new permissions for role      
+      operationId: AddermissionRole
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permissions'
+        description: array permission for this role
+        required: true
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/logs:
+    get:
+      tags:
+        - logs
+      description: all logs backend
+      operationId: getLogs
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/logs/levels:
+    get:
+      tags:
+        - logs
+      description: levels log
+      operationId: getLevelLogs
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/logs/{date}':
+    parameters:
+      - name: date
+        in: path
+        description: date log example "2020-10-10"
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - logs
+      description: show log backend
+      operationId: showLog
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    delete:
+      tags:
+        - logs
+      description: delete  log backend
+      operationId: deleteLog
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/logs/{date}/rows':
+    parameters:
+      - name: date
+        in: path
+        description: date log example "2020-10-10"
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - logs
+      description: show row log backend
+      operationId: GetRowLog
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/categories:
+    get:
+      tags:
+        - categories
+      description: all categories      
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Search'
+      operationId: Categories
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - categories
+      description: add new catgory
+      operationId: AddCategories
+      parameters:
+        - name: title
+          in: query
+          required: true
+          description: title category
+          schema:
+            type: string
+        - name: status
+          in: query
+          required: true
+          description: status category
+          schema:
+            type: integer
+        - name: parent_id
+          in: query
+          required: true
+          description: parent_id category
+          schema:
+            type: integer
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/categories/{slug}':
+    parameters:
+      - name: slug
+        in: path
+        description: slug category
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - categories
+      description: show category
+      operationId: showCategories
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    patch:
+      tags:
+        - categories
+      description: edit category
+      operationId: EditCategories
+      parameters:
+        - name: title
+          in: query
+          required: true
+          description: title category
+          schema:
+            type: string
+        - name: status
+          in: query
+          required: true
+          description: status category
+          schema:
+            type: integer
+        - name: parent_id
+          in: query
+          required: true
+          description: parent_id category
+          schema:
+            type: integer
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/categories/statuses:
+    get:
+      tags:
+        - categories
+      description: statuses categories
+      operationId: StatusCategories
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/orders:
+    get:
+      tags:
+        - orders
+      description: orders      
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Search'
+      operationId: orders
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - orders
+      description: add orders
+      operationId: addOrders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderProductVariants'
+        description: array product_variant_warehouses
+        required: true
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/orders/export:
+    post:
+      tags:
+        - orders
+      description: expoer orders
+      operationId: ExportOrders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  example: '2020-04-01'
+                to:
+                  type: string
+                  example: '2020-04-01'
+                  required:
+                    - from
+                    - to
+        description: date time form and to for filter
+        required: true
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/orders/{order}':
+    parameters:
+      - name: order
+        in: path
+        required: true
+        description: order id
+        schema:
+          type: integer
+    get:
+      tags:
+        - orders
+      description: show order
+      operationId: ShowOrder
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/orders/{order}/print':
+    parameters:
+      - name: order
+        in: path
+        required: true
+        description: order id
+        schema:
+          type: integer
+    get:
+      tags:
+        - orders
+      description: print order
+      operationId: PrintOrder
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/provinces:
+    get:
+      tags:
+        - provinces
+      description: get all provinces
+      operationId: Provinces
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Search'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/provinces/{province}/cities':
+    parameters:
+      - name: province
+        in: path
+        description: id province
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - provinces
+      description: get cities  one province
+      operationId: ProvinceCity
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/warehouses:
+    get:
+      tags:
+        - warehouses
+      description: get list warehouses
+      operationId: Warehouses
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Search'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/warehouses/{warehouse}/product-variants':
+    parameters:
+      - name: warehouse
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - inventory
+      description: get all product_variants
+      operationId: inventory
+      parameters:
+        - name: order_type_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/products:
+    get:
+      tags:
+        - products
+      description: products paginate
+      operationId: products
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Search'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - products
+      description: add new product
+      operationId: addProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  description: title producta
+                  type: string
+                category_id:
+                  description: id exist in categories
+                  type: integer
+                  example: 1
+                brand:
+                  description: id exist in brands
+                  type: integer
+                  example: 1
+                model:
+                  description: id exist in models
+                  type: string
+                  minLength: 3
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Ok
+  '/user/products/{slug}':
+    parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+    get:
+      tags:
+        - products
+      description: show product
+      operationId: showProduct
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    patch:
+      tags:
+        - products
+      description: update product
+      operationId : updateProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  description: title producta
+                  type: string
+                category_id:
+                  description: id exist in categories
+                  type: integer
+                  example: 1
+                brand:
+                  description: id exist in brands
+                  type: integer
+                  example: 1
+                model:
+                  description: id exist in models
+                  type: string
+                  minLength: 3
+                description:
+                  type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.'
+  /user/products/inventory:
+    post:
+      tags:
+        - products
+      description: inventory product_variants
+      operationId : productInventory
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Search'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_type_id:
+                  description: order type id
+                  type: integer
+                  example: 1
+                warehouses:
+                  description: id warehouses
+                  type: array
+                  items:
+                    type: integer
+                    example: 1
+                category_id:
+                  type: integer
+                  example: 1
+                search:
+                  description: search title product variant
+                  type: string
+                  minLength: 2
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/products/orderables:
+    post:
+      operationId : productOrderable
+      tags:
+        - products
+      description: orderables product_variants
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Search'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_type_id:
+                  description: order type id
+                  type: integer
+                  example: 1
+                warehouses:
+                  description: id warehouses
+                  type: array
+                  items:
+                    type: integer
+                    example: 1
+                category_id:
+                  type: integer
+                  example: 1
+                search:
+                  description: search title product variant
+                  type: string
+                  minLength: 2
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/products/{slug}/product-images':
+    parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+    get:
+      tags:
+        - products
+      description: get images product variant
+      operationId: getproductproductVariantImages
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - products
+      description: add images product variant
+      operationId: addproductVariantImages
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/products/{slug}/product-images/{id}':
+    parameters:
+      - in: path
+        name: slug
+        description: slug product variants
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        description: id image
+        schema:
+          type: string
+        required: true
+    delete:
+      tags:
+        - products
+      description: get images product variant
+      operationId: getproductVariantImages
+      responses:
+        '200':
+          description: ok
+  '/user/products/{slug}/product-variants':
+    parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+    get:
+      tags:
+        - products
+      description: get product variant
+      operationId: getproductVariant
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - products
+      description: add product variant
+      operationId: addproductVariant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                goods_id:
+                  type: integer
+                goods_code:
+                  type: integer
+              required:
+                - id
+                - goods_id
+                - goods_code
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/products/{slug}/product-variants/{id}':
+    parameters:
+      - in: path
+        name: slug
+        description: slug product variants
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        description: id image
+        schema:
+          type: string
+        required: true
+    get:
+      tags:
+        - products
+      description: get images product variant
+      operationId: getproductproductVariantImage
+      responses:
+        '200':
+          description: ok
+    patch:
+      tags:
+        - products
+      description: add product variant
+      operationId: updateProductVariant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                goods_id:
+                  type: integer
+                goods_code:
+                  type: integer
+              required:
+                - id
+                - goods_id
+                - goods_code
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/careers:
+    get:
+      tags:
+        - careers
+      operationId: careers    
+      description: 'no'        
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Search'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - careers
+      description: 'no'        
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subject
+                - tag
+                - content
+                - flow
+                - career_category_id
+              properties:
+                subject:
+                  type: string
+                tag:
+                  type: string
+                content:
+                  type: string
+                  example: '<p><strong>این شغل برای چه کسی مناسب است:<\/strong><\/p>'
+                career_category_id:
+                  type: integer
+                flow:
+                  type: object
+                  properties:
+                    status_id:
+                      type: integer
+                    user_id:
+                      type: integer
+                    approve_status_id:
+                      type: integer
+                    disapprove_status_id:
+                      type: integer
+                  required:
+                    - status_id
+                    - user_id
+                    - approve_status_id
+                    - disapprove_status_id
+            encoding:
+              content:
+                contentType: text/html; charset=utf-8
+      operationId: addcareers
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/careers/{slug}':
+    parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+    get:
+      tags:
+        - careers
+      operationId: showCareer
+      description: 'no'      
+      responses:
+        '200':
+          description: ok
+    patch:
+      tags:
+        - careers
+      operationId: editCareer
+      description: editCareer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subject
+                - tag
+                - content
+                - flow
+                - career_category_id
+              properties:
+                subject:
+                  type: string
+                tag:
+                  type: string
+                content:
+                  type: string
+                  example: '<p><strong>این شغل برای چه کسی مناسب است:<\/strong><\/p>'
+                career_category_id:
+                  type: integer
+                flow:
+                  type: object
+                  properties:
+                    status_id:
+                      type: integer
+                    user_id:
+                      type: integer
+                    approve_status_id:
+                      type: integer
+                    disapprove_status_id:
+                      type: integer
+                  required:
+                    - status_id
+                    - user_id
+                    - approve_status_id
+                    - disapprove_status_id
+            encoding:
+              content:
+                contentType: text/html; charset=utf-8
+      responses:
+        '200':
+          description: ok
+  /user/career-applies:
+    get:
+      tags:
+        - careers
+      operationId: career-applies
+      description: 'no'      
+      parameters:
+        - in: query
+          name: career_status_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/career-applies/{id}':
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - careers
+      operationId: show-career-applie
+      description: 'no'      
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    patch:
+      tags:
+        - careers
+      operationId: showCareerApplie
+      description: 'no'      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - do
+                - note
+              properties:
+                do:
+                  type: string
+                  enum:
+                    - approve
+                    - disapprove
+                note:
+                  type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/career-apply-statuses:
+    get:
+      tags:
+        - careers
+      operationId: career-apply-statuses
+      description: 'no'
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+            minLength: 3
+          required: false
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - careers
+      operationId: add-career-apply-statuses
+      description: add new career-apply-statuses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - sms
+              properties:
+                name:
+                  type: string
+                  example: sample
+                sms:
+                  type: string
+                  example: sample text
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/career-apply-statuses/{id}':
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - careers
+      operationId: showcareerApplyStatuses
+      description: 'no'      
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+            minLength: 3
+          required: false
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    patch:
+      tags:
+        - careers
+      operationId: edit-career-apply-statuses
+      description: 'no'      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - sms
+              properties:
+                name:
+                  type: string
+                  example: sample
+                sms:
+                  type: string
+                  example: sample text
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/career-applies/{id}/notes':
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - careers
+      operationId: show-career-apply-notes
+      description: 'no'      
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - careers
+      operationId: add-career-apply-notes
+      description: 'no'      
+      parameters:
+        - in: query
+          name: body
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/career-applies/{id}/attachments':
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - careers
+      operationId: show-career-apply-attachments
+      description: 'no'      
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/career-applies/{id}/attachments/{attachment_id}':
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: attachment_id
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - careers
+      operationId: showCareerApplyAttachments
+      description: 'no'      
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/order-types:
+    get:
+      tags:
+        - order-types
+      operationId: order-types
+      description: 'no'      
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Search'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/transactions:
+    get:
+      tags:
+        - transactions
+      operationId: transactions
+      description: 'no'      
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Search'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/transactions/{id}':
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - transactions
+      operationId: showTransactions
+      description: 'no'      
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/transactions/export:
+    post:
+      tags:
+        - transactions
+      operationId: transactionExport
+      description: 'no'      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - from
+                - to
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/zones:
+    get:
+      tags:
+        - zones
+      operationId: zones
+      description: 'no'      
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Search'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - zones
+      operationId: addZones
+      description: 'no'      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - type_id
+              properties:
+                name:
+                  type: string
+                type_id:
+                  type: integer
+                parent_id:
+                  type: integer
+                manager_id:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/zones/{id}':
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - zones
+      operationId: showZones
+      description: 'no'      
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    patch:
+      tags:
+        - zones
+      operationId: patchZones
+      description: 'no'      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - type_id
+              properties:
+                name:
+                  type: string
+                type_id:
+                  type: integer
+                parent_id:
+                  type: integer
+                manager_id:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/contacts:
+    get:
+      tags:
+        - contacts
+      operationId: contacts
+      description: 'no'      
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Search'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/contacts/{id}':
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - contacts
+      operationId: showContacts
+      description: 'no'      
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  '/user/contacts/{id}/verify':
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+    get:
+      tags:
+        - contacts
+      operationId: verifyContacts
+      description: 'no'      
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+  /user/tickets:
+    get:
+      tags:
+        - tickets
+      operationId: ticket
+      description: 'no'      
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - $ref: '#/components/parameters/Search'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+    post:
+      tags:
+        - tickets
+      operationId: tickets
+      description: 'no'      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subject
+                - body
+                - ticket_category_id
+              properties:
+                subject:
+                  type: string
+                body:
+                  type: string
+                ticket_category_id:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request. User ID must be an integer and larger than 0.
+        '401':
+          description: Authorization information is missing or invalid.
+security:
+  - Bearer: []
+components:
+  responses:
+    Success:
+      description: ok
+    BadRequest:
+      description: 400  Bad request.
+    Unauthorized:
+      description: 401 Unauthorized
+    NotFound:
+      description: 404 The specified resource was not found
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    Roles:
+      type: object
+      properties:
+        roles:
+          type: array
+          items:
+            type: integer
+            format: int64
+    Permissions:
+      type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            type: integer
+            format: int64
+    OrderProductVariants:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+          description: customer id
+        address_id:
+          type: integer
+          description: address customer id
+        order_type_id:
+          type: integer
+          description: order type pruduct id
+        discount:
+          type: integer
+          description: discount pruduct id
+        warehouse_id:
+          type: integer
+          description: warehouse id exist pruduct variants
+        product_variant_warehouses:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderProductVariantsItems'
+    OrderProductVariantsItems:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        qty:
+          type: integer
+          format: int64
+    # AnyValue:
+    #   nullable: true
+    #   description: 'Can be any value, including `null`.'
+  parameters:
+    PerPage:
+      in: query
+      name: per_page
+      required: false
+      schema:
+        type: integer
+        enum:
+          - 10
+          - 25
+          - 50
+        default: 10
+      description: page id
+    Search:
+      in: query
+      name: search
+      required: false
+      schema:
+        type: string
+        minimum: 0
+      description: string for search
+    Page:
+      in: query
+      name: page
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
